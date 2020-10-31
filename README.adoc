@@ -5,7 +5,7 @@
 
 = Lab: OpenAPI Spec to Camel Java DSL
 
-[Open in CodeReady Workspaces](https://codeready-openshift-workspaces.apps.cluster-943d.943d.example.opentlc.com/f?url=https://github.com/pittar-workshops/fuse7-lab-openapi-to-java/tree/main)
+**Start CodeReady Workspaces** [![Start Coding!](developer-workspace.svg)](https://codeready-openshift-workspaces.apps.cluster-943d.943d.example.opentlc.com/f?url=https://github.com/pittar-workshops/fuse7-lab-openapi-to-java/tree/main)
 
 The REST API Level 0 mission shows how to map business operations to a remote procedure call endpoint over HTTP by using a REST framework. This mission corresponds to Level 0 in the Richardson Maturity Model. 
 

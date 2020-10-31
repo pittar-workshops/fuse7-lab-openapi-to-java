@@ -39,6 +39,12 @@ components:
     type: chePlugin
 apiVersion: 1.0.0
 commands:
+  - name: 0. Generate Java DSL from OpenAPI spec
+    actions:
+      - workdir: '${CHE_PROJECTS_ROOT}/fuse-openapi-to-java'
+        type: exec
+        command: MAVEN_OPTS='-Xmx200m' && mvn camel-restdsl-openapi:generate
+        component: maven
   - name: 1. Build
     actions:
       - workdir: '${CHE_PROJECTS_ROOT}/fuse-openapi-to-java'

@@ -21,7 +21,6 @@ public class Product {
 
     public Product() {
         // Do nothing.
-        this.id=1;
         this.name="Andrew";
         this.price=100;
         this.discounted=40;

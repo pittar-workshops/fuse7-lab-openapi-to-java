@@ -3,8 +3,11 @@ package com.redhat.fuse.boosters.rest.http.demo;
 import javax.annotation.Generated;
 
 import com.redhat.fuse.boosters.rest.http.model.Product;
+import com.redhat.fuse.boosters.rest.http.service.ProductService;
+import com.redhat.fuse.boosters.rest.http.service.Products;
 
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.model.rest.RestBindingMode;
 import org.apache.camel.model.rest.RestParamType;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +22,7 @@ public final class CamelRoutes extends RouteBuilder {
      */
     public void configure() {
 
-        restConfiguration().component("servlet").contextPath("/");
+        restConfiguration().component("servlet").contextPath("/").bindingMode(RestBindingMode.json);
 
         rest()
             .get("/books")
@@ -84,6 +87,6 @@ public final class CamelRoutes extends RouteBuilder {
                 .to("direct:update_order");
 
         from("direct:get_books").description("Greetings REST service implementation route")
-            .log("Hello world");     
+            .log("Hello world").bean(Products.class, "newProduct");     
     }
 }

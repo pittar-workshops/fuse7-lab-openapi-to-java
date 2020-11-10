@@ -1,88 +1,164 @@
 {
     "openapi": "3.0.2",
     "info": {
-        "title": "Products",
+        "title": "bookstore",
         "version": "1.0.0",
         "description": "A brand new API with no content.  Go nuts!"
     },
     "paths": {
-        "/products": {
-            "description": "Get all products.",
+        "/books": {
+            "summary": "Return a list of all books.",
+            "description": "Base path for all book operations.",
             "get": {
                 "responses": {
                     "200": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/product"
-                                    }
-                                },
-                                "examples": {
-                                    "products": {
-                                        "value": [
+                        "$ref": "#/components/responses/book"
+                    }
+                },
+                "operationId": "get_books",
+                "summary": "Get the list of all books.",
+                "description": "Get all books."
+            }
+        },
+        "/books/{isbn}": {
+            "summary": "Book operations based on ISBN.",
+            "description": "Get or update a book based on ISBN.",
+            "get": {
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/isbn"
+                    }
+                },
+                "operationId": "get_book_by_isbn",
+                "summary": "Get book by ISBN.",
+                "description": "Get book info based on ISBN."
+            },
+            "parameters": [
+                {
+                    "examples": {
+                        "isbn": {
+                            "value": "1234"
+                        }
+                    },
+                    "name": "isbn",
+                    "description": "ISBN number.",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "in": "path",
+                    "required": true
+                }
+            ]
+        },
+        "/orders": {
+            "description": "Create, retrieve, and update orders.",
+            "get": {
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/orders"
+                    }
+                },
+                "operationId": "get_orders",
+                "summary": "Get all orders.",
+                "description": "Get all orders."
+            },
+            "post": {
+                "requestBody": {
+                    "description": "New order details.",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/order"
+                            },
+                            "examples": {
+                                "orders": {
+                                    "value": {
+                                        "items": [
                                             {
-                                                "id": 57,
-                                                "name": "some text",
-                                                "description": "some text"
+                                                "isbn": "123456",
+                                                "quantity": 1
                                             },
                                             {
-                                                "id": 32,
-                                                "name": "some text",
-                                                "description": "some text"
+                                                "isbn": "345678",
+                                                "quantity": 1
                                             }
                                         ]
                                     }
                                 }
                             }
-                        },
-                        "description": "Get products."
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/order"
                     }
                 },
-                "operationId": "get_products",
-                "summary": "Get all products.",
-                "description": "Get all products."
+                "operationId": "new_order",
+                "summary": "Create a new order.",
+                "description": "Create a new order."
             }
         },
-        "/products/{productId}": {
-            "summary": "Get a product by ID.",
-            "description": "Get a product by ID.",
+        "/orders/{orderId}": {
+            "summary": "Operations on a specific order.",
+            "description": "Get or update a specific order.",
             "get": {
                 "responses": {
                     "200": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/product"
-                                },
-                                "examples": {
-                                    "productId": {
-                                        "value": {
-                                            "id": 21,
-                                            "name": "Nintendo Switch",
-                                            "description": "Nintend Switch Console. Games not included."
-                                        }
+                        "$ref": "#/components/responses/orderId"
+                    }
+                },
+                "operationId": "get_order_by_id",
+                "summary": "Get an order by ID.",
+                "description": "Get an order by order id."
+            },
+            "put": {
+                "requestBody": {
+                    "description": "Updated order.",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/order"
+                            },
+                            "examples": {
+                                "order": {
+                                    "value": {
+                                        "items": [
+                                            {
+                                                "isbn": "123456",
+                                                "quantity": 1
+                                            },
+                                            {
+                                                "isbn": "345678",
+                                                "quantity": 1
+                                            }
+                                        ],
+                                        "id": 1
                                     }
                                 }
                             }
-                        },
-                        "description": "Get by ID."
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/orderId"
                     }
                 },
-                "operationId": "get_product_by_id",
-                "summary": "Get product by ID.",
-                "description": "Get product by ID."
+                "operationId": "update_order",
+                "description": "Update an order by ID."
             },
             "parameters": [
                 {
                     "examples": {
-                        "productId": {
-                            "value": "21"
+                        "orderId": {
+                            "value": "1"
                         }
                     },
-                    "name": "productId",
-                    "description": "Product ID.",
+                    "name": "orderId",
+                    "description": "Order ID.",
                     "schema": {
                         "type": "integer"
                     },
@@ -94,33 +170,242 @@
     },
     "components": {
         "schemas": {
-            "product": {
-                "description": "A product",
+            "book": {
+                "description": "Book information.",
                 "required": [
-                    "id",
-                    "name",
-                    "description"
+                    "isbn",
+                    "title",
+                    "author",
+                    "publisher",
+                    "genre"
                 ],
                 "type": "object",
                 "properties": {
-                    "id": {
-                        "description": "Product ID.",
-                        "type": "integer"
-                    },
-                    "name": {
-                        "description": "Product name.",
+                    "isbn": {
+                        "description": "ISBN number.",
                         "type": "string"
                     },
-                    "description": {
-                        "description": "Product description.",
+                    "title": {
+                        "description": "Book title.",
+                        "type": "string"
+                    },
+                    "author": {
+                        "description": "Author name.",
+                        "type": "string"
+                    },
+                    "publisher": {
+                        "description": "Book publisher.",
+                        "type": "string"
+                    },
+                    "genre": {
+                        "description": "Book genre.",
                         "type": "string"
                     }
                 },
                 "example": {
-                    "id": 21,
-                    "name": "Nintendo Switch",
-                    "description": "Nintendo Switch Console.  Game not included."
+                    "isbn": "123456",
+                    "title": "Cujo",
+                    "author": "Stephen King",
+                    "publisher": "Scribner",
+                    "genre": "Horror"
                 }
+            },
+            "item": {
+                "description": "Book order.",
+                "required": [
+                    "isbn",
+                    "quantity"
+                ],
+                "type": "object",
+                "properties": {
+                    "isbn": {
+                        "description": "ISBN of the book being ordered.",
+                        "type": "string"
+                    },
+                    "quantity": {
+                        "description": "Quantity of the book being ordered.",
+                        "type": "integer"
+                    }
+                },
+                "example": {
+                    "isbn": "123456",
+                    "quantity": 1
+                }
+            },
+            "order": {
+                "description": "A book order.",
+                "required": [
+                    "items",
+                    "id"
+                ],
+                "type": "object",
+                "properties": {
+                    "items": {
+                        "description": "List of order items.",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/item"
+                        }
+                    },
+                    "id": {
+                        "description": "Unique order ID.",
+                        "type": "integer"
+                    }
+                },
+                "example": {
+                    "items": [
+                        {
+                            "isbn": "123456",
+                            "quantity": 1
+                        },
+                        {
+                            "isbn": "345678",
+                            "quantity": 1
+                        }
+                    ],
+                    "id": 1
+                }
+            }
+        },
+        "responses": {
+            "book": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/book"
+                        },
+                        "examples": {
+                            "book": {
+                                "value": {
+                                    "isbn": "123456",
+                                    "title": "Cujo",
+                                    "author": "Stephen King",
+                                    "publisher": "Scribner",
+                                    "genre": "Horror"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Book info."
+            },
+            "order": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/order"
+                        },
+                        "examples": {
+                            "order": {
+                                "value": {
+                                    "items": [
+                                        {
+                                            "isbn": "123456",
+                                            "quantity": 1
+                                        },
+                                        {
+                                            "isbn": "345678",
+                                            "quantity": 1
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "An example order."
+            },
+            "orders": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/order"
+                            }
+                        },
+                        "examples": {
+                            "orders": {
+                                "value": [
+                                    {
+                                        "items": [
+                                            {
+                                                "isbn": "123456",
+                                                "quantity": 1
+                                            },
+                                            {
+                                                "isbn": "345678",
+                                                "quantity": 1
+                                            }
+                                        ],
+                                        "id": 1
+                                    },
+                                    {
+                                        "items": [
+                                            {
+                                                "isbn": "234567",
+                                                "quantity": 20
+                                            },
+                                            {
+                                                "isbn": "987654",
+                                                "quantity": 1
+                                            }
+                                        ],
+                                        "id": 2
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "description": "A list of orders."
+            },
+            "isbn": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/book"
+                        },
+                        "examples": {
+                            "isbn": {
+                                "value": {
+                                    "isbn": "123456",
+                                    "title": "Cujo",
+                                    "author": "Stephen King",
+                                    "publisher": "Scribner",
+                                    "genre": "Horror"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Book by ISBN."
+            },
+            "orderId": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/order"
+                        },
+                        "examples": {
+                            "orderId": {
+                                "value": {
+                                    "items": [
+                                        {
+                                            "isbn": "123456",
+                                            "quantity": 1
+                                        },
+                                        {
+                                            "isbn": "345678",
+                                            "quantity": 1
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Order ID response."
             }
         }
     }

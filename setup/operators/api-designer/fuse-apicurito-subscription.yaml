@@ -8,4 +8,4 @@ spec:
   name: fuse-apicurito
   source: redhat-operators
   sourceNamespace: openshift-marketplace
-  startingCSV: apicuritooperator.v7.7.0
+  startingCSV: apicuritooperator.v7.8.0

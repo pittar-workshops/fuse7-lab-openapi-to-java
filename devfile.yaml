@@ -65,20 +65,6 @@ commands:
           mvn spring-boot:run -Drun.jvmArguments="-Xdebug
           -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"
         component: maven
-  - name: 4. Log into deployment cluster
-    actions:
-      - workdir: '${CHE_PROJECTS_ROOT}/fuse-openapi-to-java'
-        type: exec
-        command: |
-          echo "Logging in to this cluster."
-          oc login ${KUBERNETES_SERVICE_HOST}
-        component: oc
-  - name: 5. Deploy to OpenShift
-    actions:
-      - workdir: '${CHE_PROJECTS_ROOT}/fuse-openapi-to-java'
-        type: exec
-        command: 'mvn fabric8:deploy -Popenshift -DskipTests'
-        component: maven
   - name: Debug remote java application
     actions:
       - referenceContent: |
